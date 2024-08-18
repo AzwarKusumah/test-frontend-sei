@@ -1,7 +1,7 @@
 <div class="container-fluid h-100">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Tambah Proyek</h1>
+    <h1 class="h3 mb-2 text-gray-800">Tambah Lokasi</h1>
     <form>
         <div class="form-row">
             <div class="form-group col-md-6">
@@ -54,7 +54,7 @@
                     alert('Lokasi berhasil ditambahkan!');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Gagal menambahkan proyek:', textStatus, errorThrown);
+                    console.log('Gagal menambahkan Lokasi:', textStatus, errorThrown);
                     alert('Gagal menambahkan Lokasi!');
                 }
             });

@@ -13,17 +13,11 @@
                     <thead>
                         <tr style="text-align: center;">
                             <th>No</th>
-                            <th>Nama Proyek</th>
-                            <th>Client</th>
-                            <th>Tanggal Mulai</th>
-                            <th>Tanggal Selesai</th>
-                            <th>Pimpinan Proyek</th>
-                            <th>Keterangan</th>
-                            <th>Dibuat tanggal</th>
                             <th>Nama Lokasi</th>
                             <th>Negara</th>
                             <th>Provinsi</th>
                             <th>Kota</th>
+                            <th>Tanggal</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,38 +35,26 @@
     $(document).ready(function () {
 
         $.ajax({
-            url: 'http://localhost:8080/api/proyek',
+            url: 'http://localhost:8080/api/lokasi',
             method: 'GET',
             success: function (response) {
                 var tbody = $('#dataTable tbody');
                 tbody.empty();
 
-                response.forEach(function (proyek, index) {
+                response.forEach(function (lokasi, index) {
                     var row = $('<tr>');
                     row.append($('<td>').text(index + 1));
-                    row.append($('<td>').text(proyek.namaProyek));
-                    row.append($('<td>').text(proyek.client));
-                    row.append($('<td>').text(formatTanggal(proyek.tglMulai)));
-                    row.append($('<td>').text(formatTanggal(proyek.tglSelesai)));
-                    row.append($('<td>').text(proyek.pimpinanProyek));
-                    row.append($('<td>').text(proyek.keterangan));
-                    row.append($('<td>').text(formatTanggal(proyek.createdAt)));
-
-                    if (proyek.lokasiList && proyek.lokasiList.length > 0) {
-                        var lokasi = proyek.lokasiList[0];
-                        row.append($('<td>').text(lokasi.namaLokasi));
-                        row.append($('<td>').text(lokasi.negara));
-                        row.append($('<td>').text(lokasi.provinsi));
-                        row.append($('<td>').text(lokasi.kota));
-                    } else {
-                        row.append($('<td colspan="4">').text('Lokasi tidak tersedia'));
-                    }
+                    row.append($('<td>').text(lokasi.namaLokasi));
+                    row.append($('<td>').text(lokasi.negara));
+                    row.append($('<td>').text(lokasi.provinsi));
+                    row.append($('<td>').text(lokasi.kota));
+                    row.append($('<td>').text(formatTanggal(lokasi.createdAt)));
 
                     var editButton = $('<button>', {
                         class: 'btn btn-primary btn-sm',
                         text: 'Edit',
                         click: function () {
-                            window.location.href = `<?= base_url('edit/proyek/') ?>${proyek.id}`;
+                            window.location.href = `<?= base_url('edit/lokasi/') ?>${lokasi.id}`;
                         }
                     });
 
@@ -80,8 +62,8 @@
                         class: 'btn btn-danger btn-sm',
                         text: 'Delete',
                         click: function () {
-                            if (confirm('Apakah Anda yakin ingin menghapus proyek ini?')) {
-                                deleteProyek(proyek.id, row);
+                            if (confirm('Apakah Anda yakin ingin menghapus lokasi ini?')) {
+                                deleteProyek(lokasi.id, row);
                             }
                         }
                     });
@@ -91,7 +73,7 @@
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log('Gagal mengambil data proyek:', textStatus, errorThrown);
+                console.log('Gagal mengambil data lokasi:', textStatus, errorThrown);
             }
         });
 
@@ -103,15 +85,15 @@
 
         function deleteProyek(id, rowElement) {
             $.ajax({
-                url: `http://localhost:8080/api/proyek/${id}`,
+                url: `http://localhost:8080/api/lokasi/${id}`,
                 method: 'DELETE',
                 success: function () {
                     alert('Proyek berhasil dihapus');
                     rowElement.remove();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Gagal menghapus proyek:', textStatus, errorThrown);
-                    alert('Gagal menghapus proyek!');
+                    console.log('Gagal menghapus lokasi:', textStatus, errorThrown);
+                    alert('Gagal menghapus lokasi!');
                 }
             });
         }

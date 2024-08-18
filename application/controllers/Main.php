@@ -18,4 +18,13 @@ class Main extends CI_Controller
         $this->load->view('components/footer.php');
     }
 
+    public function lokasi()
+    {
+        $this->load->view('components/header.php');
+        $this->load->view('components/sidebar.php');
+        $this->load->view('components/navbar.php');
+        $this->load->view('main/lokasi.php');
+        $this->load->view('components/footer.php');
+    }
+
 }

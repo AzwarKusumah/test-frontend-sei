@@ -2,7 +2,7 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Tambah Proyek</h1>
-    <form>
+    <form action="#" method="PUT">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputName">Nama Proyek</label>
@@ -39,3 +39,72 @@
         <button type="submit" class="btn btn-primary mt-5">Submit</button>
     </form>
 </div>
+<script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const proyekId = '<?= $this->uri->segment(3); ?>';
+
+        $.ajax({
+            url: 'http://localhost:8080/api/lokasi',
+            method: 'GET',
+            success: function (response) {
+                var lokasiSelect = $('#lokasiSelect');
+                response.forEach(function (lokasi) {
+                    var option = $('<option>', {
+                        value: lokasi.id,
+                        text: lokasi.namaLokasi
+                    });
+                    lokasiSelect.append(option);
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Gagal mengambil data lokasi:', textStatus, errorThrown);
+            }
+        });
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+
+            var namaProyek = $('#inputName').val();
+            var client = $('#inputClient').val();
+            var tglMulai = $('#inputTglMulai').val();
+            var tglSelesai = $('#inputTglSelesai').val();
+            var pimpinanProyek = $('#inputPimpinan').val();
+            var keterangan = $('#inputKeterangan').val();
+            var lokasiId = $('#lokasiSelect').val();
+
+            var formattedTglMulai = new Date(tglMulai).toISOString();
+            var formattedTglSelesai = new Date(tglSelesai).toISOString();
+
+            var data = {
+                "namaProyek": namaProyek,
+                "client": client,
+                "tglMulai": formattedTglMulai,
+                "tglSelesai": formattedTglSelesai,
+                "pimpinanProyek": pimpinanProyek,
+                "keterangan": keterangan,
+                "lokasiList": [
+                    {
+                        "id": lokasiId
+                    }
+                ]
+            };
+
+            $.ajax({
+                url: `http://localhost:8080/api/proyek/${proyekId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('Proyek berhasil diupdate');
+                    window.location.href = '<?= base_url('/'); ?>';
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Gagal mengedit proyek:', textStatus, errorThrown);
+                    alert('Gagal mengedit proyek!');
+                }
+            });
+        });
+
+    });
+</script>
